@@ -10,17 +10,19 @@
 
 #include "HttpPacket.h"
 
+#include <string>
 
+// Encapsulate http request packets.
 class HttpRequestPacket: public HttpPacket {
 public: 
-    string method;
-    string path;
-    string protocol;
+    std::string method;
+    std::string path;
+    std::string protocol;
     
 /**
  * @param buffer
  */
-static HttpRequestPacket ParseBytes(vector<byte> buffer);
+static HttpRequestPacket ParseBytes(std::vector<char> buffer);
 };
 
 #endif //_HTTPREQUESTPACKET_H
