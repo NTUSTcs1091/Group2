@@ -8,9 +8,12 @@
 #ifndef _PACKET_H
 #define _PACKET_H
 
+#include <vector>
+#include <iostream>
+
 class Packet {
 public: 
-    vector<byte> data;
+    std::vector<char> data;
     
 void Operation1();
     
