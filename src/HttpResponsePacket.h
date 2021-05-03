@@ -10,16 +10,19 @@
 
 #include "HttpPacket.h"
 
+#include <string>
+#include <vector>
 
+ // Encapsulate http response packets.
 class HttpResponsePacket: public HttpPacket {
 public: 
-    string protocol;
+    std::string protocol;
     int status_code;
     
 /**
  * @param response
  */
-static vector<byte> GetBytes(HttpResponsePacket response);
+static std::vector<char> GetBytes(HttpResponsePacket response);
 };
 
 #endif //_HTTPRESPONSEPACKET_H
