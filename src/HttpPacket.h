@@ -1,23 +1,29 @@
+// Copyright (c) 2021 Pei-Ru Wang, Cheryl Huang, Yuan Zhou. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 /**
  * Project MyHttpServer
  * @author Pei-Ru Wang, Cheryl Huang, Yuan Zhou
  * @version 0.0.1
  */
 
-
 #ifndef _HTTPPACKET_H
 #define _HTTPPACKET_H
 
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 
-// Encapsulate http packets.
+// Basic http packets class.
 class HttpPacket {
-public: 
-    std::unordered_map<std::string, std::string> header;
-    std::string body;
-    
-virtual std::string ToString() = 0;
+public:
+  // The header map of the http packet
+  std::unordered_map<std::string, std::string> header;
+  // The body data of the http packet
+  std::string body;
+
+  // Return a string representing the http packet
+  virtual std::string ToString() = 0;
 };
 
 #endif //_HTTPPACKET_H

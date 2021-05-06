@@ -1,46 +1,43 @@
+// Copyright (c) 2021 Pei-Ru Wang, Cheryl Huang, Yuan Zhou. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 /**
  * Project MyHttpServer
  * @author Pei-Ru Wang, Cheryl Huang, Yuan Zhou
  * @version 0.0.1
  */
 
-
 #ifndef _HTTPHANDLER_H
 #define _HTTPHANDLER_H
 
-#include <boost\asio.hpp>
-#include <boost\shared_ptr.hpp>
-#include <boost\bind.hpp>
-#include <boost\lexical_cast.hpp>
-#include <boost\enable_shared_from_this.hpp>
-
 #include <iostream>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
+
+#include <boost/asio.hpp>
+#include <boost/bind.hpp>
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "HttpPacket.h"
 
-#define	Asio boost::asio
-#define TCP boost::asio::ip::tcp
-
+// Basic http handler class
 class HttpHandler {
 public:
-
-    HttpHandler(Asio::io_service& io_service)
-        :socket(io_service)
-    {}
+  // Initialize a basic http handler
+  HttpHandler(boost::asio::io_service &io_service);
 
 public:
-
-    /**
-     * @param input
-     */
-    HttpPacket Handle(HttpPacket input);
+  // Return the socket instance
+  boost::asio::ip::tcp::socket &getSocket();
+  // Pre-process the request packet
+  void Handle(HttpPacket &input);
 
 protected:
-
-    TCP::socket socket;
-
+  // Keep connected with the client-side
+  boost::asio::ip::tcp::socket socket;
 };
 
 #endif //_HTTPHANDLER_H

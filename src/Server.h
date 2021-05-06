@@ -1,3 +1,7 @@
+// Copyright (c) 2021 Pei-Ru Wang, Cheryl Huang, Yuan Zhou. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 /**
  * Project MyHttpServer
  * @author Pei-Ru Wang, Cheryl Huang, Yuan Zhou
@@ -7,53 +11,48 @@
 #ifndef _SERVER_H
 #define _SERVER_H
 
-#include <boost\asio.hpp>
-#include <boost\shared_ptr.hpp>
-#include <boost\bind.hpp>
-
 #include <iostream>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
+
+#include <boost/asio.hpp>
+#include <boost/bind.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "HttpRequestHandler.h"
 
-#define	Asio boost::asio
-#define TCP boost::asio::ip::tcp
-
-typedef boost::shared_ptr<HttpRequestHandler> handler_ptr;
-
-// Responsible for receiving requests from customers and handing them to requesthandler for processing.
-// Manage customer requests.
+// Responsible for receiving requests from customers and handing them to
+// requesthandler for processing. Manage customer requests.
 class Server {
-public:
-
-    /**
-     * @param io_service
-     * @param ed
-     */
-    Server(Asio::io_service& io_service, TCP::endpoint& ep)
-        :io_service(io_service), acceptor(io_service, ep), sessionCount(0)
-    {
-        StartServer();
-    }
-
-    ~Server();
 
 public:
+  // Initialize the server, establish an endpoint and wait for the connection
+  Server(boost::asio::io_service &io_service,
+         boost::asio::ip::tcp::endpoint &ep);
 
-    void StartServer();
+  ~Server();
+
+public:
+  typedef boost::shared_ptr<HttpRequestHandler> handler_ptr;
+
+  // Setup server service
+  void StartServer();
 
 private:
-    void HandleAccept(handler_ptr new_handler, const boost::system::error_code& error);
+  // Handle the requests sent by the client
+  void HandleAccept(handler_ptr new_handler,
+                    const boost::system::error_code &error);
 
 private:
+  // Interact with the I/O services of the OS
+  boost::asio::io_service &io_service;
+  // Listen for connection requests
+  boost::asio::ip::tcp::acceptor acceptor;
 
-    Asio::io_service& io_service;
-    TCP::acceptor acceptor;
-
-    int sessionCount;
-    std::unordered_map<int, handler_ptr> handlerList;
-
+  // The number of sessions currently connected to the server
+  int sessionCount;
+  // The list of HTTP session handlers
+  std::unordered_map<int, handler_ptr> mapHandlerList;
 };
 
 #endif //_SERVER_H
