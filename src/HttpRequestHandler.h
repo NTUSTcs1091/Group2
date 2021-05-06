@@ -1,60 +1,57 @@
+// Copyright (c) 2021 Pei-Ru Wang, Cheryl Huang, Yuan Zhou. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 /**
  * Project MyHttpServer
  * @author Pei-Ru Wang, Cheryl Huang, Yuan Zhou
  * @version 0.0.1
  */
 
-
 #ifndef _HTTPREQUESTHANDLER_H
 #define _HTTPREQUESTHANDLER_H
 
-#include <boost\asio.hpp>
-#include <boost\shared_ptr.hpp>
-#include <boost\bind.hpp>
-#include <boost\lexical_cast.hpp>
-#include <boost\enable_shared_from_this.hpp>
+#include "HttpHandler.h"
 
 #include <iostream>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 
-#include "HttpHandler.h"
+#include <boost/asio.hpp>
+#include <boost/bind.hpp>
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/shared_ptr.hpp>
+
 #include "HttpRequestPacket.h"
 
-#define	Asio boost::asio
-#define TCP boost::asio::ip::tcp
-
-typedef boost::shared_ptr<HttpRequestHandler> handler_ptr;
-
-// Responsible for processing the request, receiving data from the buffer and encapsulating it into http packets.
+// Responsible for processing the request, receiving data from the buffer and
+// encapsulating it into http packets.
 class HttpRequestHandler : public HttpHandler {
-public:
-
-    /**
-     * @param io_service
-     * @param mapSessionList
-     * @param count
-     */
-    HttpRequestHandler(Asio::io_service& io_service, std::unordered_map<int, handler_ptr>& mapHandlerList, int nCount)
-        :mapHandlerList(mapHandlerList), nCount(nCount), HttpHandler(io_service)
-    {}
-
-    ~HttpRequestHandler();
 
 public:
+  typedef boost::shared_ptr<HttpRequestHandler> handler_ptr;
 
-    TCP::socket& getSocket();
-    void start();
+  // Initialize a http request handler
+  HttpRequestHandler(boost::asio::io_service &io_service,
+                     std::unordered_map<int, handler_ptr> &mapHandlerList,
+                     int nCount);
+
+  ~HttpRequestHandler();
+
+public:
+  // Establish connection
+  void start();
 
 private:
-
-    void HandleHttpRequest(const boost::system::error_code& error);
+  // Handle the http request from input stream
+  void HandleHttpRequest(const boost::system::error_code &error);
 
 private:
-
-    std::unordered_map<int, handler_ptr>& mapHandlerList;
-    int nCount;
-
+  // The list of HTTP session handlers
+  std::unordered_map<int, handler_ptr> &mapHandlerList;
+  // The key of current handler in mapHandlerList
+  int nCount;
 };
 
 #endif //_HTTPREQUESTHANDLER_H

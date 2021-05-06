@@ -1,45 +1,47 @@
+// Copyright (c) 2021 Pei-Ru Wang, Cheryl Huang, Yuan Zhou. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 /**
  * Project MyHttpServer
  * @author Pei-Ru Wang, Cheryl Huang, Yuan Zhou
  * @version 0.0.1
  */
 
-
 #ifndef _HTTPROUTERHANDLER_H
 #define _HTTPROUTERHANDLER_H
 
-#include "RequestHandler.h"
-#include "HttpRequestPacket.h"
-
-#include <boost\asio.hpp>
-#include <boost\shared_ptr.hpp>
-#include <boost\bind.hpp>
+#include "HttpHandler.h"
 
 #include <iostream>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 
-// Assign the encapsulated http packets to the corresponding business logic request-handler for processing.
-class HttpRouterHandler: public HttpHandler {
+#include <boost/asio.hpp>
+#include <boost/bind.hpp>
+#include <boost/shared_ptr.hpp>
 
-public: 
-    /**
-     * @param io_service
-     */
-    HttpRouterHandler(Asio::io_service& io_service)
-        :HttpHandler(io_service)
-    {}
+#include "HttpRequestPacket.h"
+#include "RequestHandler.h"
 
-    ~HttpRouterHandler();
-
-public:
-
-    void RouteHttpRequest(const HttpRequestPacket& httpPacket, const boost::system::error_code& error);
+// Assign the encapsulated http packets to the corresponding business logic
+// request-handler for processing.
+class HttpRouterHandler : public HttpHandler {
 
 private:
+  // Initialize HTTP request router singleton
+  HttpRouterHandler(boost::asio::io_service &io_service);
 
-    std::unordered_map<std::string, RequestHandler> RequestHandlers;
-    
+  ~HttpRouterHandler();
+
+public:
+  // Distribute the http request packet to the corresponding handler
+  void RouteHttpRequest(const HttpRequestPacket &httpPacket,
+                        const boost::system::error_code &error);
+
+private:
+  // Store all business request handler instances
+  std::unordered_map<std::string, RequestHandler> RequestHandlers;
 };
 
 #endif //_HTTPROUTERHANDLER_H
