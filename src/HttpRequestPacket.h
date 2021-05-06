@@ -18,14 +18,15 @@
 // Encapsulate http request packets.
 class HttpRequestPacket : public HttpPacket {
 public:
+  // The method of the http request
   std::string method;
+  // The url path of the http request
   std::string path;
+  // The protocol of the http request
   std::string protocol;
 
-  /**
-   * @param buffer
-   */
-  static HttpRequestPacket ParseBytes(std::vector<char> buffer);
+  // Parse http pequest packet from the buffer
+  static HttpRequestPacket ParseBytes(const std::vector<char> buffer);
 };
 
 #endif //_HTTPREQUESTPACKET_H

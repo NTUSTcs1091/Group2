@@ -14,7 +14,8 @@
 #include "HttpPacket.h"
 
 #include <string>
-#include <vector>
+
+#include <boost/asio.hpp>
 
 // Encapsulate http response packets.
 class HttpResponsePacket : public HttpPacket {
@@ -25,7 +26,7 @@ public:
   int status_code;
 
   // Parse a http response packet into bytes
-  static std::vector<char> GetBytes(HttpResponsePacket response);
+  static std::unique_ptr<char> GetBytes(const HttpResponsePacket &response);
 };
 
 #endif //_HTTPRESPONSEPACKET_H
