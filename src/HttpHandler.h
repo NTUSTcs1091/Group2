@@ -31,7 +31,7 @@ public:
 
 public:
   // Return the socket instance
-  boost::asio::ip::tcp::socket &getSocket();
+  std::unique_ptr<boost::asio::ip::tcp::socket> GetSocket();
   // Pre-process the request packet
   void Handle(HttpPacket &input);
 

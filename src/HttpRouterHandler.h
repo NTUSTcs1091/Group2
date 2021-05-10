@@ -35,13 +35,18 @@ private:
   ~HttpRouterHandler();
 
 public:
+  // Get the singleton instance of HttpRouterHandler
+  static std::unique_ptr<HttpRouterHandler> GetInstance();
+
   // Distribute the http request packet to the corresponding handler
   void RouteHttpRequest(const HttpRequestPacket &httpPacket,
                         const boost::system::error_code &error);
 
 private:
+  // The singleton instance of HttpRouterHandler
+  static HttpRouterHandler instance;
   // Store all business request handler instances
-  std::unordered_map<std::string, RequestHandler> RequestHandlers;
+  std::unordered_map<std::string, RequestHandler&> RequestHandlers;
 };
 
 #endif //_HTTPROUTERHANDLER_H
