@@ -25,8 +25,8 @@ public:
   // The status code of the http response
   int status_code;
 
-  // Parse a http response packet into bytes
-  static std::unique_ptr<char> GetBytes(const HttpResponsePacket &response);
+  // Serialize a http response packet into bytes
+  static std::unique_ptr<std::string> GetBytes(const HttpResponsePacket &response);
 };
 
 #endif //_HTTPRESPONSEPACKET_H
