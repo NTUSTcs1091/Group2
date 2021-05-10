@@ -26,7 +26,7 @@ public:
   std::string protocol;
 
   // Parse http pequest packet from the buffer
-  static HttpRequestPacket ParseBytes(const std::vector<char> buffer);
+  static HttpRequestPacket ParseBytes(const std::vector<char> &buffer);
 };
 
 #endif //_HTTPREQUESTPACKET_H
