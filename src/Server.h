@@ -11,12 +11,10 @@
 #ifndef _SERVER_H
 #define _SERVER_H
 
-#include <iostream>
 #include <string>
 #include <unordered_map>
 
 #include <boost/asio.hpp>
-#include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include "HttpRequestHandler.h"
@@ -27,8 +25,8 @@ class Server {
 
 public:
   // Initialize the server, establish an endpoint and wait for the connection
-  Server(boost::asio::io_service &io_service,
-         boost::asio::ip::tcp::endpoint &ep);
+  Server(const boost::asio::io_service &io_service,
+         const boost::asio::ip::tcp::endpoint &ep);
 
   ~Server();
 
@@ -45,14 +43,14 @@ private:
 
 private:
   // Interact with the I/O services of the OS
-  boost::asio::io_service &io_service;
+  boost::asio::io_service *io_service;
   // Listen for connection requests
   boost::asio::ip::tcp::acceptor acceptor;
 
   // The number of sessions currently connected to the server
-  int sessionCount;
+  int session_count;
   // The list of HTTP session handlers
-  std::unordered_map<int, handler_ptr> mapHandlerList;
+  std::unordered_map<int, handler_ptr> map_handler_list;
 };
 
 #endif //_SERVER_H
