@@ -25,16 +25,22 @@ class Server {
 
 public:
   // Initialize the server, establish an endpoint and wait for the connection
-  Server(const boost::asio::io_service &io_service,
-         const boost::asio::ip::tcp::endpoint &ep);
+  Server(const std::string &address, const std::string &port,
+         std::size_t max_session_count, std::size_t max_thread_count);
 
   ~Server();
 
 public:
   typedef boost::shared_ptr<HttpRequestHandler> handler_ptr;
 
+  // Avoid copying
+  Server(const Server &) = delete;
+  Server &operator=(const Server &) = delete;
+
   // Setup server service
   void StartServer();
+  // Run service
+  void Run();
 
 private:
   // Handle the requests sent by the client
@@ -43,14 +49,18 @@ private:
 
 private:
   // Interact with the I/O services of the OS
-  boost::asio::io_service *io_service;
+  boost::asio::io_service io_service;
   // Listen for connection requests
   boost::asio::ip::tcp::acceptor acceptor;
-
-  // The number of sessions currently connected to the server
-  int session_count;
   // The list of HTTP session handlers
   std::unordered_map<int, handler_ptr> map_handler_list;
+
+  // The number of sessions currently connected to the server
+  std::size_t session_count;
+  // The maximunm number of sessions
+  std::size_t max_session_count;
+  // The maximunm number of threads
+  std::size_t max_thread_count;
 };
 
 #endif //_SERVER_H
