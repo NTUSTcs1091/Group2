@@ -24,20 +24,27 @@
 #include "HttpPacket.h"
 
 // Basic http handler class
-class HttpHandler {
+class HttpHandler
+{
 public:
   // Initialize a basic http handler
   HttpHandler(boost::asio::io_service &io_service);
+
+  // Avoid copying
+  HttpHandler(const HttpHandler&) = delete;
+  HttpHandler& operator=(const HttpHandler&) = delete;
 
 public:
   // Return the socket instance
   std::unique_ptr<boost::asio::ip::tcp::socket> GetSocket();
   // Pre-process the request packet
-  void Handle(HttpPacket &input);
+  void Handle(const HttpPacket &input);
 
 protected:
   // Keep connected with the client-side
   boost::asio::ip::tcp::socket socket;
+  // Buffer for incoming data.
+  std::array<char, 8192> buffer;
 };
 
 #endif //_HTTPHANDLER_H
