@@ -17,9 +17,9 @@
  */
 
 HttpRequestHandler::HttpRequestHandler(
-    boost::asio::io_service &io_service,
-    std::unordered_map<int, handler_ptr> &map_handler_list, const int n_count)
-    : map_handler_list(map_handler_list), n_count(n_count), strand(io_service),
+    boost::asio::io_service *io_service,
+    std::unordered_map<int, handler_ptr> *map_handler_list, const int n_count)
+    : map_handler_list(*map_handler_list), n_count(n_count), strand(*io_service),
       HttpHandler(io_service) {}
 
 HttpRequestHandler::~HttpRequestHandler() {
@@ -49,12 +49,12 @@ void HttpRequestHandler::HandleRead() {
           [this, self](std::error_code error, std::size_t bytes_transferred) {
             if (!error) {
               HttpRequestPacket::parse_result result;
-              std::tie(result, std::ignore) = httpRequestPacket.ParseBytes(
+              std::tie(result, std::ignore) = http_request_packet.ParseBytes(
                   buffer.data(), buffer.data() + bytes_transferred);
 
               if (result == HttpRequestPacket::success) {
                 HttpRouterHandler::GetInstance()->RouteHttpRequest(
-                    httpRequestPacket, httpResponsePacket);
+                    http_request_packet, &http_response_packet);
                 HttpRequestHandler::HandleWrite();
               } else if (result == HttpRequestPacket::success) {
 
