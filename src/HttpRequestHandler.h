@@ -16,11 +16,12 @@
 #include <unordered_map>
 
 #include <boost/asio.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "HttpHandler.h"
-#include "HttpRouterHandler.h"
+#include "HttpRequestPacket.h"
+#include "HttpResponsePacket.h"
 
 // Responsible for processing the request, receiving data from the buffer and
 // encapsulating it into http packets.
@@ -62,9 +63,6 @@ private:
   HttpRequestPacket httpRequestPacket;
   // The response to be sent back to the client
   HttpResponsePacket httpResponsePacket;
-
-  // Assign parsed httppacket to the corresponding business handler
-  HttpRouterHandler httpRouterHandler;
 };
 
 #endif //_HTTPREQUESTHANDLER_H

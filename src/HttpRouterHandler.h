@@ -30,9 +30,11 @@ class HttpRouterHandler : public HttpHandler {
 
 private:
   // Initialize HTTP request router singleton
-  HttpRouterHandler(boost::asio::io_service &io_service);
+  HttpRouterHandler();
 
 public:
+  typedef boost::shared_ptr<RequestHandler> handler_ptr;
+
   // Get the singleton instance of HttpRouterHandler
   static std::unique_ptr<HttpRouterHandler> GetInstance();
 
@@ -41,10 +43,8 @@ public:
                         const HttpResponsePacket &responsePacket);
 
 private:
-  // The singleton instance of HttpRouterHandler
-  static HttpRouterHandler instance;
   // Store all business request handler instances
-  std::unordered_map<std::string, RequestHandler &> RequestHandlers;
+  std::unordered_map<std::string, handler_ptr> RequestHandlers;
 };
 
 #endif //_HTTPROUTERHANDLER_H

@@ -44,7 +44,7 @@ void Server::StartServer() {
       new HttpRequestHandler(io_service, map_handler_list, session_count));
   ++session_count;
 
-  acceptor.async_accept(new_handler->GetSocket(),
+  acceptor.async_accept(*new_handler->GetSocket(),
                         boost::bind(&Server::HandleAccept, this, new_handler,
                                     boost::asio::placeholders::error));
 }

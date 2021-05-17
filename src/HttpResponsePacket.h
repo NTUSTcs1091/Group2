@@ -11,11 +11,11 @@
 #ifndef _HTTPRESPONSEPACKET_H
 #define _HTTPRESPONSEPACKET_H
 
-#include "HttpPacket.h"
-
 #include <string>
 
 #include <boost/asio.hpp>
+
+#include "HttpPacket.h"
 
 // Encapsulate http response packets.
 class HttpResponsePacket : public HttpPacket {
