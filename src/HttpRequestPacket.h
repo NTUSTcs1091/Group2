@@ -18,6 +18,9 @@
 // Encapsulate http request packets.
 class HttpRequestPacket : public HttpPacket {
 public:
+  HttpRequestPacket();
+
+public:
   // The method of the http request
   std::string method;
   // The url path of the http request
@@ -25,8 +28,18 @@ public:
   // The protocol of the http request
   std::string protocol;
 
+  /// Result of parse.
+  enum parse_result { success, fail };
+
   // Parse http pequest packet from the buffer
-  static HttpRequestPacket ParseBytes(const std::vector<char> &buffer);
+  // The enum return value is the result for parsing
+  // The InputIterator return value indicates how much of the input has been
+  // parsed
+  template <typename InputIterator>
+  std::tuple<parse_result, InputIterator> ParseBytes(InputIterator begin,
+                                                     InputIterator end);
+  // Return a string representing the http packet
+  std::string ToString();
 };
 
 #endif //_HTTPREQUESTPACKET_H
