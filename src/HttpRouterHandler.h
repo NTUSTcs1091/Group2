@@ -39,12 +39,12 @@ public:
   static std::unique_ptr<HttpRouterHandler> GetInstance();
 
   // Distribute the http request packet to the corresponding handler
-  void RouteHttpRequest(const HttpRequestPacket &requestPacket,
-                        const HttpResponsePacket &responsePacket);
+  void RouteHttpRequest(const HttpRequestPacket &request_packet,
+                        HttpResponsePacket *response_packet);
 
 private:
   // Store all business request handler instances
-  std::unordered_map<std::string, handler_ptr> RequestHandlers;
+  std::unordered_map<std::string, handler_ptr> map_request_handlers;
 };
 
 #endif //_HTTPROUTERHANDLER_H
