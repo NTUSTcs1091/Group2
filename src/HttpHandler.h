@@ -28,7 +28,7 @@ class HttpHandler
 {
 public:
   // Initialize a basic http handler
-  HttpHandler(boost::asio::io_service &io_service);
+  HttpHandler(boost::asio::io_service *io_service);
 
   // Avoid copying
   HttpHandler(const HttpHandler&) = delete;

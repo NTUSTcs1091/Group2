@@ -33,8 +33,8 @@ public:
   typedef boost::shared_ptr<HttpRequestHandler> handler_ptr;
 
   // Initialize a http request handler
-  HttpRequestHandler(boost::asio::io_service &io_service,
-                     std::unordered_map<int, handler_ptr> &mapHandlerList,
+  HttpRequestHandler(boost::asio::io_service *io_service,
+                     std::unordered_map<int, handler_ptr> *map_handler_list,
                      const int nCount);
 
   ~HttpRequestHandler();
@@ -60,9 +60,9 @@ private:
   int n_count;
 
   // The incoming request
-  HttpRequestPacket httpRequestPacket;
+  HttpRequestPacket http_request_packet;
   // The response to be sent back to the client
-  HttpResponsePacket httpResponsePacket;
+  HttpResponsePacket http_response_packet;
 };
 
 #endif //_HTTPREQUESTHANDLER_H
