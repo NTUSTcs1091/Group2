@@ -35,7 +35,7 @@ public:
   // Initialize a http request handler
   HttpRequestHandler(boost::asio::io_service &io_service,
                      std::unordered_map<int, handler_ptr> &mapHandlerList,
-                     int nCount);
+                     const int nCount);
 
   ~HttpRequestHandler();
 

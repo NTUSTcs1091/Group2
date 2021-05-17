@@ -23,7 +23,8 @@
  */
 
 Server::Server(const std::string &address, const std::string &port,
-               std::size_t max_session_count, std::size_t max_thread_count)
+               const std::size_t max_session_count,
+               const std::size_t max_thread_count)
     : acceptor(io_service), max_session_count(max_session_count),
       session_count(0), max_thread_count(max_thread_count) {
 

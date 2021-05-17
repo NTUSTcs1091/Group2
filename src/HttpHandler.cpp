@@ -20,4 +20,3 @@ HttpHandler::HttpHandler(boost::asio::io_service &io_service)
 std::unique_ptr<boost::asio::ip::tcp::socket> HttpHandler::GetSocket() {
   return std::make_unique<boost::asio::ip::tcp::socket>(socket);
 }
-
