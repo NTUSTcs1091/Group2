@@ -31,7 +31,7 @@ public:
   // Serialize a http response packet into bytes
   static std::unique_ptr<std::string> GetBytes(const HttpResponsePacket &response);
   // Return a string representing the http packet
-  std::string ToString();
+  virtual std::string ToString() override;
 };
 
 #endif //_HTTPRESPONSEPACKET_H
