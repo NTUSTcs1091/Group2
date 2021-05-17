@@ -39,7 +39,7 @@ public:
   std::tuple<parse_result, InputIterator> ParseBytes(InputIterator begin,
                                                      InputIterator end);
   // Return a string representing the http packet
-  std::string ToString();
+  virtual std::string ToString() override;
 };
 
 #endif //_HTTPREQUESTPACKET_H
