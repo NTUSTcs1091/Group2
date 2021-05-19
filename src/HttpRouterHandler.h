@@ -36,7 +36,7 @@ public:
   typedef boost::shared_ptr<RequestHandler> handler_ptr;
 
   // Get the singleton instance of HttpRouterHandler
-  static std::unique_ptr<HttpRouterHandler> GetInstance();
+  static HttpRouterHandler *GetInstance();
 
   // Distribute the http request packet to the corresponding handler
   void RouteHttpRequest(const HttpRequestPacket &request_packet,
