@@ -25,7 +25,7 @@ class Server {
 
 public:
   // Initialize the server, establish an endpoint and wait for the connection
-  Server(const std::string &address, const std::string &port,
+  Server(const std::string &address, const uint16_t &port,
          const std::size_t max_session_count,
          const std::size_t max_thread_count);
 
