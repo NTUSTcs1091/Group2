@@ -10,7 +10,7 @@
 
 #include "HttpRouterHandler.h"
 
-std::unique_ptr<HttpRouterHandler> HttpRouterHandler::GetInstance() {
+HttpRouterHandler* HttpRouterHandler::GetInstance() {
     static HttpRouterHandler instance;
-    return std::make_unique<HttpRouterHandler>(instance);
+    return &instance;
 }

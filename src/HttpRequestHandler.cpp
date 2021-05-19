@@ -19,8 +19,8 @@
 HttpRequestHandler::HttpRequestHandler(
     boost::asio::io_service *io_service,
     std::unordered_map<int, handler_ptr> *map_handler_list, const int n_count)
-    : map_handler_list(*map_handler_list), n_count(n_count), strand(*io_service),
-      HttpHandler(io_service) {}
+    : map_handler_list(*map_handler_list), n_count(n_count),
+      strand(*io_service), HttpHandler(io_service) {}
 
 HttpRequestHandler::~HttpRequestHandler() {
   HttpRequestHandler::Stop();

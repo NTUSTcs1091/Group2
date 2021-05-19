@@ -20,7 +20,7 @@
 // Encapsulate http response packets.
 class HttpResponsePacket : public HttpPacket {
 public:
-	HttpResponsePacket();
+  HttpResponsePacket();
 
 public:
   // The protocol of the http response
@@ -29,7 +29,7 @@ public:
   int status_code;
 
   // Serialize a http response packet into bytes
-  static std::unique_ptr<std::string> GetBytes(const HttpResponsePacket &response);
+  static std::string GetBytes(const HttpResponsePacket &response);
   // Return a string representing the http packet
   virtual std::string ToString() override;
 };
