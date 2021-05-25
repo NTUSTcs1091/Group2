@@ -11,13 +11,12 @@
 #ifndef _HTTPREQUESTHANDLER_H
 #define _HTTPREQUESTHANDLER_H
 
-#include <iostream>
-#include <string>
-#include <unordered_map>
-
 #include <boost/asio.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/shared_ptr.hpp>
+#include <iostream>
+#include <string>
+#include <unordered_map>
 
 #include "HttpHandler.h"
 #include "HttpRequestPacket.h"
@@ -28,13 +27,12 @@
 class HttpRequestHandler
     : public HttpHandler,
       public boost::enable_shared_from_this<HttpRequestHandler> {
-
 public:
   typedef boost::shared_ptr<HttpRequestHandler> handler_ptr;
 
   // Initialize a http request handler
-  HttpRequestHandler(boost::asio::io_service *io_service,
-                     std::unordered_map<int, handler_ptr> *map_handler_list,
+  HttpRequestHandler(boost::asio::io_context* io_context,
+                     std::unordered_map<int, handler_ptr>* map_handler_list,
                      const int nCount);
 
   ~HttpRequestHandler();
@@ -53,7 +51,7 @@ private:
 
 private:
   // The list of HTTP session handlers
-  std::unordered_map<int, handler_ptr> &map_handler_list;
+  std::unordered_map<int, handler_ptr>& map_handler_list;
   // Ensure synchronization when reading/writing buffer
   boost::asio::io_service::strand strand;
   // The key of current handler in mapHandlerList
@@ -65,4 +63,4 @@ private:
   HttpResponsePacket http_response_packet;
 };
 
-#endif //_HTTPREQUESTHANDLER_H
+#endif  //_HTTPREQUESTHANDLER_H

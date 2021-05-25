@@ -17,10 +17,12 @@
  */
 
 HttpRequestHandler::HttpRequestHandler(
-    boost::asio::io_service *io_service,
+    boost::asio::io_context *io_context,
     std::unordered_map<int, handler_ptr> *map_handler_list, const int n_count)
-    : map_handler_list(*map_handler_list), n_count(n_count),
-      strand(*io_service), HttpHandler(io_service) {}
+    : map_handler_list(*map_handler_list),
+      n_count(n_count),
+      strand(*io_context),
+      HttpHandler(io_context) {}
 
 HttpRequestHandler::~HttpRequestHandler() {
   HttpRequestHandler::Stop();
@@ -57,7 +59,6 @@ void HttpRequestHandler::HandleRead() {
                     http_request_packet, &http_response_packet);
                 HttpRequestHandler::HandleWrite();
               } else if (result == HttpRequestPacket::success) {
-
                 HttpRequestHandler::HandleWrite();
               } else {
                 HttpRequestHandler::HandleRead();

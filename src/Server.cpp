@@ -10,26 +10,26 @@
 
 #include "Server.h"
 
-#include <thread>
-
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/shared_ptr.hpp>
+#include <thread>
 
 /**
  * Server implementation
  */
 
-Server::Server(const std::string &address, const std::string &port,
+Server::Server(const std::string &address, const uint16_t port,
                const std::size_t max_session_count,
                const std::size_t max_thread_count)
-    : acceptor(io_service), max_session_count(max_session_count),
-      session_count(0), max_thread_count(max_thread_count) {
-
+    : acceptor(io_context),
+      max_session_count(max_session_count),
+      session_count(0),
+      max_thread_count(max_thread_count) {
   // Open the acceptor with the option to reuse the address.
-  boost::asio::ip::tcp::resolver resolver(io_service);
+  boost::asio::ip::tcp::resolver resolver(io_context);
   boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve({address, port});
   acceptor.open(endpoint.protocol());
   acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
@@ -40,9 +40,8 @@ Server::Server(const std::string &address, const std::string &port,
 }
 
 void Server::StartServer() {
-  // 开始监听客户端的请求
   handler_ptr new_handler(
-      new HttpRequestHandler(io_service, map_handler_list, session_count));
+      new HttpRequestHandler(&io_context, &map_handler_list, session_count));
   ++session_count;
 
   acceptor.async_accept(*new_handler->GetSocket(),
@@ -55,14 +54,14 @@ void Server::Run() {
     std::vector<std::shared_ptr<std::thread>> threads;
     for (std::size_t i = 0; i < max_thread_count; i++) {
       std::shared_ptr<std::thread> thread =
-          std::make_shared<std::thread>([&]() { io_service.run(); });
+          std::make_shared<std::thread>([&]() { io_context.run(); });
       threads.push_back(thread);
     }
     for (auto &&thread : threads) {
       thread->join();
     }
   } else {
-    io_service.run();
+    io_context.run();
   }
 }
 

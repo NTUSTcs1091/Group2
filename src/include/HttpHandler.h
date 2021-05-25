@@ -11,15 +11,10 @@
 #ifndef _HTTPHANDLER_H
 #define _HTTPHANDLER_H
 
+#include <boost/asio.hpp>
 #include <iostream>
 #include <string>
 #include <unordered_map>
-
-#include <boost/asio.hpp>
-#include <boost/bind.hpp>
-#include <boost/enable_shared_from_this.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include "HttpPacket.h"
 
@@ -27,21 +22,17 @@
 class HttpHandler {
 public:
   // Initialize a basic http handler
-  HttpHandler(boost::asio::io_service *io_service);
+  HttpHandler(boost::asio::io_context* io_context);
 
   // Avoid copying
-  HttpHandler(const HttpHandler &) = delete;
-  HttpHandler &operator=(const HttpHandler &) = delete;
-
-  // Avoid copying
-  HttpHandler(const HttpHandler &) = delete;
-  HttpHandler &operator=(const HttpHandler &) = delete;
+  HttpHandler(const HttpHandler&) = delete;
+  HttpHandler& operator=(const HttpHandler&) = delete;
 
 public:
   // Return the socket instance
-  inline boost::asio::ip::tcp::socket *GetSocket() { return &socket; };
+  boost::asio::ip::tcp::socket* GetSocket() { return &socket; };
   // Pre-process the request packet
-  void Handle(const HttpPacket &input);
+  void Handle(const HttpPacket& input);
 
 protected:
   // Keep connected with the client-side
@@ -50,4 +41,4 @@ protected:
   std::array<char, 8192> buffer;
 };
 
-#endif //_HTTPHANDLER_H
+#endif  //_HTTPHANDLER_H

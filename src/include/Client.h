@@ -33,4 +33,4 @@ private:
   socket socket;
 };
 
-#endif //_CLIENT_H
+#endif  //_CLIENT_H

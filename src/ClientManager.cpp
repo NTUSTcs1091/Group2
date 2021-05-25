@@ -8,14 +8,10 @@
  * @version 0.0.1
  */
 
-
 #include "ClientManager.h"
 
 /**
  * ClientManager implementation
  */
 
-
-void ClientManager::HandleAccept() {
-
-}
+void ClientManager::HandleAccept() {}

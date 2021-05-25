@@ -8,11 +8,11 @@
  * @version 0.0.1
  */
 
-#ifndef _VIEWREQUESTHANDLER_H
-#define _VIEWREQUESTHANDLER_H
+#ifndef _RESULTREQUESTHANDLER_H
+#define _RESULTREQUESTHANDLER_H
 
 #include "RequestHandler.h"
 
-class ViewRequestHandler : public RequestHandler {};
+class ResultRequestHandler : public RequestHandler {};
 
-#endif //_VIEWREQUESTHANDLER_H
+#endif  //_RESULTREQUESTHANDLER_H

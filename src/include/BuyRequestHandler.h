@@ -15,4 +15,4 @@
 
 class BuyRequestHandler : public RequestHandler {};
 
-#endif //_BUYREQUESTHANDLER_H
+#endif  //_BUYREQUESTHANDLER_H

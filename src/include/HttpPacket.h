@@ -26,8 +26,8 @@ public:
   virtual std::string ToString() = 0;
 
   // Avoid copying
-  HttpPacket(HttpPacket &cpy) = delete;
-  HttpPacket &operator=(HttpPacket &cpy) = delete;
+  HttpPacket(HttpPacket& cpy) = delete;
+  HttpPacket& operator=(HttpPacket& cpy) = delete;
 };
 
-#endif //_HTTPPACKET_H
+#endif  //_HTTPPACKET_H

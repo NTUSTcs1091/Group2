@@ -21,4 +21,4 @@ private:
   io_context context;
 };
 
-#endif //_CLIENTMANAGER_H
+#endif  //_CLIENTMANAGER_H

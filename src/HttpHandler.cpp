@@ -14,5 +14,5 @@
  * HttpHandler implementation
  */
 
-HttpHandler::HttpHandler(boost::asio::io_service *io_service)
-    : socket(*io_service) {}
+HttpHandler::HttpHandler(boost::asio::io_context *io_context)
+    : socket(*io_context) {}

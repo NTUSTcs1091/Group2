@@ -11,6 +11,6 @@
 #include "HttpRouterHandler.h"
 
 HttpRouterHandler* HttpRouterHandler::GetInstance() {
-    static HttpRouterHandler instance;
-    return &instance;
+  static HttpRouterHandler instance;
+  return &instance;
 }

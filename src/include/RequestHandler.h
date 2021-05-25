@@ -8,19 +8,11 @@
  * @version 0.0.1
  */
 
-#ifndef _PACKET_H
-#define _PACKET_H
+#ifndef _REQUESTHANDLER_H
+#define _REQUESTHANDLER_H
 
-#include <iostream>
-#include <vector>
+#include "HttpHandler.h"
 
-class Packet {
-public:
-  std::vector<char> data;
+class RequestHandler : public HttpHandler {};
 
-  void Operation1();
-
-  void Operation2();
-};
-
-#endif //_PACKET_H
+#endif  //_REQUESTHANDLER_H

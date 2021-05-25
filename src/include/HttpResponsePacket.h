@@ -13,8 +13,6 @@
 
 #include <string>
 
-#include <boost/asio.hpp>
-
 #include "HttpPacket.h"
 
 // Encapsulate http response packets.
@@ -29,9 +27,9 @@ public:
   int status_code;
 
   // Serialize a http response packet into bytes
-  static std::string GetBytes(const HttpResponsePacket &response);
+  static std::string GetBytes(const HttpResponsePacket& response);
   // Return a string representing the http packet
   virtual std::string ToString() override;
 };
 
-#endif //_HTTPRESPONSEPACKET_H
+#endif  //_HTTPRESPONSEPACKET_H
