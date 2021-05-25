@@ -11,21 +11,19 @@
 #ifndef _SERVER_H
 #define _SERVER_H
 
-#include <string>
-#include <unordered_map>
-
 #include <boost/asio.hpp>
 #include <boost/shared_ptr.hpp>
+#include <string>
+#include <unordered_map>
 
 #include "HttpRequestHandler.h"
 
 // Responsible for receiving requests from customers and handing them to
 // requesthandler for processing. Manage customer requests.
 class Server {
-
 public:
   // Initialize the server, establish an endpoint and wait for the connection
-  Server(const std::string &address, const uint16_t port,
+  Server(const std::string& address, const uint16_t port,
          const std::size_t max_session_count,
          const std::size_t max_thread_count);
 
@@ -35,8 +33,8 @@ public:
   typedef boost::shared_ptr<HttpRequestHandler> handler_ptr;
 
   // Avoid copying
-  Server(const Server &) = delete;
-  Server &operator=(const Server &) = delete;
+  Server(const Server&) = delete;
+  Server& operator=(const Server&) = delete;
 
   // Setup server service
   void StartServer();
@@ -46,11 +44,11 @@ public:
 private:
   // Handle the requests sent by the client
   void HandleAccept(handler_ptr new_handler,
-                    const boost::system::error_code &error);
+                    const boost::system::error_code& error);
 
 private:
   // Interact with the I/O services of the OS
-  boost::asio::io_service io_service;
+  boost::asio::io_context io_context;
   // Listen for connection requests
   boost::asio::ip::tcp::acceptor acceptor;
   // The list of HTTP session handlers
@@ -64,4 +62,4 @@ private:
   std::size_t max_thread_count;
 };
 
-#endif //_SERVER_H
+#endif  //_SERVER_H

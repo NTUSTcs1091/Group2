@@ -30,4 +30,4 @@ public:
   HttpPacket& operator=(HttpPacket& cpy) = delete;
 };
 
-#endif //_HTTPPACKET_H
+#endif  //_HTTPPACKET_H
