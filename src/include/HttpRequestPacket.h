@@ -11,9 +11,9 @@
 #ifndef _HTTPREQUESTPACKET_H
 #define _HTTPREQUESTPACKET_H
 
-#include "HttpPacket.h"
-
 #include <string>
+
+#include "HttpPacket.h"
 
 // Encapsulate http request packets.
 class HttpRequestPacket : public HttpPacket {
@@ -42,4 +42,4 @@ public:
   virtual std::string ToString() override;
 };
 
-#endif //_HTTPREQUESTPACKET_H
+#endif  //_HTTPREQUESTPACKET_H
