@@ -29,8 +29,8 @@ Server::Server(const std::string &address, const uint16_t port,
       session_count(0),
       max_thread_count(max_thread_count) {
   // Open the acceptor with the option to reuse the address.
-  boost::asio::ip::tcp::resolver resolver(io_context);
-  boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve({address, port});
+  boost::asio::ip::address add;
+  boost::asio::ip::tcp::endpoint endpoint(add.from_string(address), port);
   acceptor.open(endpoint.protocol());
   acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
   acceptor.bind(endpoint);
