@@ -67,4 +67,16 @@ void HttpRequestHandler::HandleRead() {
           }));
 }
 
-void HttpRequestHandler::HandleWrite() {}
+void HttpRequestHandler::HandleWrite() {
+  auto self(shared_from_this());
+  boost::asio::async_write(
+      socket, *http_response_packet.GetBytes(),
+      strand.wrap([this, self](std::error_code error, std::size_t) {
+        if (!error) {
+          // Connection closure
+          boost::system::error_code ignored_error;
+          socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both,
+                          ignored_error);
+        }
+      }));
+}
