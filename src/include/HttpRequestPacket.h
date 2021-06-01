@@ -28,16 +28,6 @@ public:
   // The protocol of the http request
   std::string protocol;
 
-  /// Result of parse.
-  enum parse_result { success, fail };
-
-  // Parse http pequest packet from the buffer
-  // The enum return value is the result for parsing
-  // The InputIterator return value indicates how much of the input has been
-  // parsed
-  template <typename InputIterator>
-  std::tuple<parse_result, InputIterator> ParseBytes(InputIterator begin,
-                                                     InputIterator end);
   // Return a string representing the http packet
   virtual std::string ToString() override;
 };
