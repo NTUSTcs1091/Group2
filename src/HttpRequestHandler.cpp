@@ -58,7 +58,7 @@ void HttpRequestHandler::HandleRead() {
                 HttpRouterHandler::GetInstance()->RouteHttpRequest(
                     http_request_packet, &http_response_packet);
                 HttpRequestHandler::HandleWrite();
-              } else if (result == HttpRequestPacket::success) {
+              } else if (result == HttpRequestPacket::fail) {
                 HttpRequestHandler::HandleWrite();
               } else {
                 HttpRequestHandler::HandleRead();
