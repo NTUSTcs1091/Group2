@@ -50,15 +50,16 @@ void HttpRequestHandler::HandleRead() {
       strand.wrap(
           [this, self](std::error_code error, std::size_t bytes_transferred) {
             if (!error) {
-              HttpRequestPacket::parse_result result;
-              std::tie(result, std::ignore) = http_request_packet.ParseBytes(
-                  buffer.data(), buffer.data() + bytes_transferred);
+              RequestParser::parse_result result;
+              std::tie(result, std::ignore) =
+                  request_parser.Parse(&http_request_packet, buffer.data(),
+                                       buffer.data() + bytes_transferred);
 
-              if (result == HttpRequestPacket::success) {
+              if (result == RequestParser::success) {
                 HttpRouterHandler::GetInstance()->RouteHttpRequest(
                     http_request_packet, &http_response_packet);
                 HttpRequestHandler::HandleWrite();
-              } else if (result == HttpRequestPacket::fail) {
+              } else if (result == RequestParser::fail) {
                 HttpRequestHandler::HandleWrite();
               } else {
                 HttpRequestHandler::HandleRead();
