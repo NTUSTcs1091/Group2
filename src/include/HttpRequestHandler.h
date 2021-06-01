@@ -21,6 +21,7 @@
 #include "HttpHandler.h"
 #include "HttpRequestPacket.h"
 #include "HttpResponsePacket.h"
+#include "RequestParser.h"
 
 // Responsible for processing the request, receiving data from the buffer and
 // encapsulating it into http packets.
@@ -59,6 +60,8 @@ private:
 
   // The incoming request
   HttpRequestPacket http_request_packet;
+  // The parser for the incoming request
+  RequestParser request_parser;
   // The response to be sent back to the client
   HttpResponsePacket http_response_packet;
 };
