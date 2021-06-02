@@ -17,6 +17,9 @@
 // Basic http packets class.
 class HttpPacket {
 public:
+  HttpPacket();
+
+public:
   // The header map of the http packet
   std::unordered_map<std::string, std::string> headers;
   // The content data of the http packet
