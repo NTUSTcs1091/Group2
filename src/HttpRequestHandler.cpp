@@ -47,25 +47,26 @@ void HttpRequestHandler::HandleRead() {
   auto self(shared_from_this());
   socket.async_read_some(
       boost::asio::buffer(buffer),
-      strand.wrap(
-          [this, self](std::error_code error, std::size_t bytes_transferred) {
-            if (!error) {
-              RequestParser::parse_result result;
-              std::tie(result, std::ignore) =
-                  request_parser.Parse(&http_request_packet, buffer.data(),
-                                       buffer.data() + bytes_transferred);
+      strand.wrap([this, self](std::error_code error,
+                               std::size_t bytes_transferred) {
+        if (!error) {
+          RequestParser::parse_result result;
+          std::tie(result, std::ignore) =
+              request_parser.Parse(&http_request_packet, buffer.data(),
+                                   buffer.data() + bytes_transferred);
 
-              if (result == RequestParser::success) {
-                HttpRouterHandler::GetInstance()->RouteHttpRequest(
-                    http_request_packet, &http_response_packet);
-                HttpRequestHandler::HandleWrite();
-              } else if (result == RequestParser::fail) {
-                HttpRequestHandler::HandleWrite();
-              } else {
-                HttpRequestHandler::HandleRead();
-              }
-            }
-          }));
+          if (result == RequestParser::success) {
+            HttpRouterHandler::GetInstance()->RouteHttpRequest(
+                http_request_packet, &http_response_packet);
+            HttpRequestHandler::HandleWrite();
+          } else if (result == RequestParser::fail) {
+            http_response_packet.status_code = HttpResponsePacket::bad_request;
+            HttpRequestHandler::HandleWrite();
+          } else {
+            HttpRequestHandler::HandleRead();
+          }
+        }
+      }));
 }
 
 void HttpRequestHandler::HandleWrite() {
