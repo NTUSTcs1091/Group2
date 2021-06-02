@@ -19,8 +19,8 @@ class HttpPacket {
 public:
   // The header map of the http packet
   std::unordered_map<std::string, std::string> headers;
-  // The body data of the http packet
-  std::string body;
+  // The content data of the http packet
+  std::string content;
 
   // Return a string representing the http packet
   virtual std::string ToString() = 0;
