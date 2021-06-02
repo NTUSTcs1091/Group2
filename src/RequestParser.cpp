@@ -14,6 +14,8 @@
  * RequestParser implementation
  */
 
+void RequestParser::reset() { state = init; }
+
 template <typename InputIterator>
 std::tuple<RequestParser::parse_result, InputIterator> RequestParser::Parse(
     HttpRequestPacket* HttpRequestPacket, InputIterator begin,
@@ -59,7 +61,174 @@ bool RequestParser::IsTspecial(int c) {
   }
 }
 
-HttpRequestPacket::parse_result consume(HttpRequestPacket* HttpRequestPacket,
-                                        char input) {
-  // TODO
+RequestParser::parse_result RequestParser::consume(
+    HttpRequestPacket* httpRequestPacket, char input) {
+  switch (state) {
+    case init:
+      if (!IsChar(input) || IsCtl(input) || IsTspecial(input)) {
+        return fail;
+      } else {
+        state = method;
+        httpRequestPacket->method.push_back(input);
+        return indeterminate;
+      }
+    case method:
+      if (input == ' ') {
+        state = path;
+        return indeterminate;
+      } else if (!IsChar(input) || IsCtl(input) || IsTspecial(input)) {
+        return fail;
+      } else {
+        httpRequestPacket->method.push_back(input);
+        return indeterminate;
+      }
+    case path:
+      if (input == ' ') {
+        state = protocol_h;
+        return indeterminate;
+      } else if (IsCtl(input)) {
+        return fail;
+      } else {
+        httpRequestPacket->path.push_back(input);
+        return indeterminate;
+      }
+    case protocol_h:
+      if (input == 'H') {
+        httpRequestPacket->protocol.push_back(input);
+        state = protocol_ht;
+        return indeterminate;
+      } else {
+        return fail;
+      }
+    case protocol_ht:
+      if (input == 'T') {
+        httpRequestPacket->protocol.push_back(input);
+        state = protocol_htt;
+        return indeterminate;
+      } else {
+        return fail;
+      }
+    case protocol_htt:
+      if (input == 'T') {
+        httpRequestPacket->protocol.push_back(input);
+        state = protocol_http;
+        return indeterminate;
+      } else {
+        return fail;
+      }
+    case protocol_http:
+      if (input == 'P') {
+        httpRequestPacket->protocol.push_back(input);
+        state = protocol_slash;
+        return indeterminate;
+      } else {
+        return fail;
+      }
+    case protocol_slash:
+      if (input == '/') {
+        httpRequestPacket->protocol.push_back(input);
+        state = protocol_version_major;
+        return indeterminate;
+      } else {
+        return fail;
+      }
+    case protocol_version_major:
+      if (input == '.') {
+        httpRequestPacket->protocol.push_back(input);
+        state = protocol_version_minor;
+        return indeterminate;
+      } else if (IsDigit(input)) {
+        httpRequestPacket->protocol.push_back(input);
+        return indeterminate;
+      } else {
+        return fail;
+      }
+    case protocol_version_minor:
+      if (input == '\r') {
+        state = new_line_1;
+        return indeterminate;
+      } else if (IsDigit(input)) {
+        httpRequestPacket->protocol.push_back(input);
+        return indeterminate;
+      } else {
+        return fail;
+      }
+    case new_line_1:
+      if (input == '\n') {
+        state = header_start;
+        return indeterminate;
+      } else {
+        return fail;
+      }
+    case header_start:
+      if (input == '\r') {
+        state = new_line_3;
+        return indeterminate;
+      } else if (!httpRequestPacket->headers.empty() &&
+                 (input == ' ' || input == '\t')) {
+        state = header_lws;
+        return indeterminate;
+      } else if (!IsChar(input) || IsCtl(input) || IsTspecial(input)) {
+        return fail;
+      } else {
+        header_name_tmp.clear();
+        header_value_tmp.clear();
+        header_name_tmp.push_back(input);
+        state = header_name;
+        return indeterminate;
+      }
+    case header_lws:
+      if (input == '\r') {
+        state = new_line_2;
+        return indeterminate;
+      } else if (input == ' ' || input == '\t') {
+        return indeterminate;
+      } else if (IsCtl(input)) {
+        return fail;
+      } else {
+        state = header_value;
+        header_value_tmp.push_back(input);
+        return indeterminate;
+      }
+    case header_name:
+      if (input == ':') {
+        state = space_before_header_value;
+        return indeterminate;
+      } else if (!IsChar(input) || IsCtl(input) || IsTspecial(input)) {
+        return fail;
+      } else {
+        header_name_tmp.push_back(input);
+        return indeterminate;
+      }
+    case space_before_header_value:
+      if (input == ' ') {
+        state = header_value;
+        return indeterminate;
+      } else {
+        return fail;
+      }
+    case header_value:
+      if (input == '\r') {
+        httpRequestPacket->headers[header_name_tmp] = header_value_tmp;
+        state = new_line_2;
+        return indeterminate;
+      } else if (IsCtl(input)) {
+        return fail;
+      } else {
+        header_value_tmp.push_back(input);
+        return indeterminate;
+      }
+    case new_line_2:
+      if (input == '\n') {
+        state = header_start;
+        return indeterminate;
+      } else {
+        return fail;
+      }
+    case new_line_3:
+      return (input == '\n') ? success : fail;
+    // TODO: parse body
+    default:
+      return fail;
+  }
 }
