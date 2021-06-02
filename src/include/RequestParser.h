@@ -21,7 +21,10 @@ public:
   RequestParser();
 
 public:
-  /// Result of parse.
+  // reset the parser
+  void reset();
+
+  // Result of parse.
   enum parse_result { success, fail, indeterminate };
 
   // Parse http pequest packet from the buffer
@@ -39,7 +42,7 @@ public:
 
 private:
   // Handle the next character of input.
-  parse_result consume(HttpRequestPacket* HttpRequestPacket, char input);
+  parse_result consume(HttpRequestPacket* httpRequestPacket, char input);
 
   // Check if a byte is an HTTP character.
   static bool IsChar(int c);
@@ -52,6 +55,36 @@ private:
 
   // Check if a byte is a digit.
   static bool IsDigit(int c);
+
+  // The current state of parser
+  enum parser_state {
+    init,
+    method,
+    path,
+    protocol_h,
+    protocol_ht,
+    protocol_htt,
+    protocol_http,
+    protocol_slash,
+    protocol_version_major_start,
+    protocol_version_major,
+    protocol_version_minor_start,
+    protocol_version_minor,
+
+    new_line_1,
+    header_start,
+    header_lws,
+    header_name,
+    space_before_header_value,
+    header_value,
+    new_line_2,
+    new_line_3,
+  } state;
+
+  // Temporary storage of header name
+  std::string header_name_tmp;
+  // Temporary storage of header value
+  std::string header_value_tmp;
 };
 
 #endif  //_REQUESTPARSER_H
