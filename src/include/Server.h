@@ -11,10 +11,11 @@
 #ifndef _SERVER_H
 #define _SERVER_H
 
-#include <boost/asio.hpp>
-#include <boost/shared_ptr.hpp>
 #include <string>
 #include <unordered_map>
+
+#include <boost/asio.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "HttpRequestHandler.h"
 
