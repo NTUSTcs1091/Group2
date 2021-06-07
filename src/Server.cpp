@@ -10,12 +10,9 @@
 
 #include "Server.h"
 
-#include <boost/asio.hpp>
-#include <boost/bind.hpp>
-#include <boost/enable_shared_from_this.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/shared_ptr.hpp>
 #include <thread>
+
+#include <boost/bind.hpp>
 
 /**
  * Server implementation
@@ -50,18 +47,14 @@ void Server::StartServer() {
 }
 
 void Server::Run() {
-  if (max_thread_count > 1) {
-    std::vector<std::shared_ptr<std::thread>> threads;
-    for (std::size_t i = 0; i < max_thread_count; i++) {
-      std::shared_ptr<std::thread> thread =
-          std::make_shared<std::thread>([&]() { io_context.run(); });
-      threads.push_back(thread);
-    }
-    for (auto &&thread : threads) {
-      thread->join();
-    }
-  } else {
-    io_context.run();
+  std::vector<std::shared_ptr<std::thread>> threads;
+  for (std::size_t i = 0; i < max_thread_count; i++) {
+    std::shared_ptr<std::thread> thread =
+        std::make_shared<std::thread>([&]() { io_context.run(); });
+    threads.push_back(thread);
+  }
+  for (auto &&thread : threads) {
+    thread->join();
   }
 }
 
@@ -70,11 +63,9 @@ void Server::HandleAccept(handler_ptr handler,
   if (!acceptor.is_open()) {
     return;
   }
-
   if (!error) {
     handler->Start();
   }
-
   StartServer();
 }
 
