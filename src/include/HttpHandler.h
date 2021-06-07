@@ -11,10 +11,11 @@
 #ifndef _HTTPHANDLER_H
 #define _HTTPHANDLER_H
 
-#include <boost/asio.hpp>
 #include <iostream>
 #include <string>
 #include <unordered_map>
+
+#include <boost/asio.hpp>
 
 #include "HttpPacket.h"
 
