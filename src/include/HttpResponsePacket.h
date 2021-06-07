@@ -11,8 +11,9 @@
 #ifndef _HTTPRESPONSEPACKET_H
 #define _HTTPRESPONSEPACKET_H
 
-#include <boost/asio.hpp>
 #include <string>
+
+#include <boost/asio.hpp>
 
 #include "HttpPacket.h"
 
