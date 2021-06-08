@@ -79,12 +79,16 @@ private:
     header_value,
     new_line_2,
     new_line_3,
+
+    content
   } state;
 
   // Temporary storage of header name
   std::string header_name_tmp;
   // Temporary storage of header value
   std::string header_value_tmp;
+  // The size of request content
+  size_t content_size;
 };
 
 #endif  //_REQUESTPARSER_H

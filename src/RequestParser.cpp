@@ -14,6 +14,8 @@
  * RequestParser implementation
  */
 
+RequestParser::RequestParser() : state(init), content_size(0) {}
+
 void RequestParser::reset() { state = init; }
 
 template <typename InputIterator>
@@ -210,6 +212,9 @@ RequestParser::parse_result RequestParser::consume(
     case header_value:
       if (input == '\r') {
         httpRequestPacket->headers[header_name_tmp] = header_value_tmp;
+        if (header_name_tmp.compare("Content-Length")) {
+          content_size = atoi(header_value_tmp.c_str());
+        }
         state = new_line_2;
         return indeterminate;
       } else if (IsCtl(input)) {
@@ -226,8 +231,14 @@ RequestParser::parse_result RequestParser::consume(
         return fail;
       }
     case new_line_3:
-      return (input == '\n') ? success : fail;
-    // TODO: parse body
+      if (content_size == 0) {
+        return (input == '\n') ? success : fail;
+      } else {
+        state = content;
+      }
+    case content:
+      --content_size;
+      return (input == '\n') ? success : indeterminate;
     default:
       return fail;
   }
