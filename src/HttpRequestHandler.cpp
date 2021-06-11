@@ -16,31 +16,22 @@
  * HttpRequestHandler implementation
  */
 
-HttpRequestHandler::HttpRequestHandler(
-    boost::asio::io_context *io_context,
-    std::unordered_map<int, handler_ptr> *map_handler_list, const int n_count)
-    : map_handler_list(*map_handler_list),
-      n_count(n_count),
-      strand(*io_context),
-      HttpHandler(io_context) {}
+HttpRequestHandler::HttpRequestHandler(boost::asio::io_context* io_context,
+                                       Server* server, const int n_count)
+    : n_count(n_count), strand(*io_context), HttpHandler(io_context) {
+  this->server = server;
+}
 
 HttpRequestHandler::~HttpRequestHandler() {
-  HttpRequestHandler::Stop();
   std::cout << n_count << ":~HandlerComplete" << std::endl;
 }
 
-void HttpRequestHandler::Start() {
-  auto self(shared_from_this());
-  map_handler_list.insert(std::make_pair(n_count, self));
-
-  HttpRequestHandler::HandleRead();
-}
+void HttpRequestHandler::Start() { HandleRead(); }
 
 void HttpRequestHandler::Stop() {
-  auto it = map_handler_list.find(n_count);
-  map_handler_list.erase(it);
   socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
   socket.close();
+  server->ReleaseHandler(n_count);
 }
 
 void HttpRequestHandler::HandleRead() {
@@ -58,12 +49,12 @@ void HttpRequestHandler::HandleRead() {
           if (result == RequestParser::success) {
             HttpRouterHandler::GetInstance()->RouteHttpRequest(
                 http_request_packet, &http_response_packet);
-            HttpRequestHandler::HandleWrite();
+            HandleWrite();
           } else if (result == RequestParser::fail) {
             http_response_packet.status_code = HttpResponsePacket::bad_request;
-            HttpRequestHandler::HandleWrite();
+            HandleWrite();
           } else {
-            HttpRequestHandler::HandleRead();
+            HandleRead();
           }
         }
       }));
@@ -76,7 +67,7 @@ void HttpRequestHandler::HandleWrite() {
       strand.wrap([this, self](std::error_code error, std::size_t) {
         if (!error) {
           // Connection closure
-          HttpRequestHandler::Stop();
+          Stop();
         }
       }));
 }

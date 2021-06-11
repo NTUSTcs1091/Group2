@@ -19,10 +19,11 @@
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/shared_ptr.hpp>
 
+#include "Server.h"
 #include "HttpHandler.h"
+#include "RequestParser.h"
 #include "HttpRequestPacket.h"
 #include "HttpResponsePacket.h"
-#include "RequestParser.h"
 
 // Responsible for processing the request, receiving data from the buffer and
 // encapsulating it into http packets.
@@ -33,8 +34,7 @@ public:
   typedef boost::shared_ptr<HttpRequestHandler> handler_ptr;
 
   // Initialize a http request handler
-  HttpRequestHandler(boost::asio::io_context* io_context,
-                     std::unordered_map<int, handler_ptr>* map_handler_list,
+  HttpRequestHandler(boost::asio::io_context* io_context, Server* server,
                      const int nCount);
 
   ~HttpRequestHandler();
@@ -45,6 +45,10 @@ public:
   // Terminate connection
   void Stop();
 
+public:
+  // The key of current handler in mapHandlerList
+  int n_count;
+
 private:
   // Perform an asynchronous read operation
   void HandleRead();
@@ -52,12 +56,10 @@ private:
   void HandleWrite();
 
 private:
-  // The list of HTTP session handlers
-  std::unordered_map<int, handler_ptr>& map_handler_list;
+  // The http server pointer
+  Server* server;
   // Ensure synchronization when reading/writing buffer
   boost::asio::io_service::strand strand;
-  // The key of current handler in mapHandlerList
-  int n_count;
 
   // The incoming request
   HttpRequestPacket http_request_packet;
