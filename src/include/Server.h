@@ -31,16 +31,18 @@ public:
   ~Server();
 
 public:
-  typedef boost::shared_ptr<HttpRequestHandler> handler_ptr;
+  typedef std::unique_ptr<HttpRequestHandler> handler_ptr;
 
   // Avoid copying
   Server(const Server&) = delete;
   Server& operator=(const Server&) = delete;
 
   // Setup server service
-  void StartServer();
+  void AcceptOnce();
   // Run service
   void Run();
+  // Release request handler
+  void ReleaseHandler(const size_t n_count);
 
 private:
   // Handle the requests sent by the client
