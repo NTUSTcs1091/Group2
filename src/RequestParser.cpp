@@ -238,6 +238,7 @@ RequestParser::parse_result RequestParser::consume(
       }
     case content:
       --content_size;
+      httpRequestPacket->content.push_back(input);
       return (input == '\n') ? success : indeterminate;
     default:
       return fail;
