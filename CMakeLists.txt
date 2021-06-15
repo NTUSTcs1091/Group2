@@ -27,5 +27,3 @@ if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS}) 
     target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
 endif()
-
-
