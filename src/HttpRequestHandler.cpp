@@ -31,6 +31,7 @@ void HttpRequestHandler::Start() { HandleRead(); }
 void HttpRequestHandler::Stop() {
   socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
   socket.close();
+  // this cannot be used after this call, it will be freed in server
   server->ReleaseHandler(n_count);
 }
 
