@@ -8,20 +8,21 @@
  * @version 0.0.1
  */
 
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 #include "RequestParser.h"
 #include "HttpRequestPacket.h"
 
-// TEST(RequestParserTest, ValidRequest) {
+const int kTestSubSize = 20;
+
 TEST(RequestParserTest, ValidRequest) {
   HttpRequestPacket packet;
   RequestParser parser;
 
   char test_request[] =
       "POST /addItem HTTP/1.1\r\n"
-      "Content-Type: text/plain; "
-      "charset=utf-8\r\n"
+      "Content-Type: text/plain;charset=utf-8\r\n"
       "Content-Length: 4\r\n"
       "Connection: close\r\n"
       "\r\n"
@@ -29,11 +30,12 @@ TEST(RequestParserTest, ValidRequest) {
 
   RequestParser::parse_result result;
   std::tie(result, std::ignore) =
-      parser.Parse(&packet, test_request, test_request + 20);
+      parser.Parse(&packet, test_request, test_request + kTestSubSize);
   EXPECT_EQ(RequestParser::parse_result::indeterminate, result);
 
-  std::tie(result, std::ignore) = parser.Parse(
-      &packet, test_request + 20, test_request + strlen(test_request));
+  std::tie(result, std::ignore) =
+      parser.Parse(&packet, test_request + kTestSubSize,
+                   test_request + strlen(test_request));
   EXPECT_EQ(RequestParser::parse_result::success, result);
 
   EXPECT_EQ("POST", packet.method);

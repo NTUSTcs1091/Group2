@@ -63,6 +63,20 @@ bool RequestParser::IsTspecial(int c) {
   }
 }
 
+// Here is a state machine for http request parser
+//
+// The structure of http request should be expected as:
+// GET /view HTTP/1.1\r\n
+// Content-Type: text/plain;charset=utf-8\r\n
+// Content-Length: 4\r\n
+// Connection: close\r\n
+// \r\n
+// test
+//
+// If the input character is not valid, will return fail
+// If the parse process is finished, will return success
+// If the input character is valid but parse process is not finished, will
+// return indeterminate
 RequestParser::parse_result RequestParser::consume(
     HttpRequestPacket* httpRequestPacket, char input) {
   switch (state) {
