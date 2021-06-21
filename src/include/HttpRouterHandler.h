@@ -38,8 +38,8 @@ public:
   static HttpRouterHandler* GetInstance();
 
   // Distribute the http request packet to the corresponding handler
-  void RouteHttpRequest(const HttpRequestPacket& request_packet,
-                        HttpResponsePacket* response_packet);
+  void RouteHttpRequest(const HttpRequestPacket& http_request_packet,
+                        HttpResponsePacket* http_response_packet);
 
 private:
   // Store all business request handler instances
