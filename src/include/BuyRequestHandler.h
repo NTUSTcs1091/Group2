@@ -16,11 +16,11 @@
 // Handle purchase request, reduce inventory
 class BuyRequestHandler : public RequestHandler {
 public:
-  BuyRequestHandler();
+  BuyRequestHandler() = default;
 
 public:
-  // Business processing
-  void BusinessProcessing(const HttpRequestPacket& http_request_packet,
+  // Handle buy request, manage the stock
+  void ProcessBusinessLogic(const HttpRequestPacket& http_request_packet,
                           HttpResponsePacket* http_response_packet) override;
 };
 

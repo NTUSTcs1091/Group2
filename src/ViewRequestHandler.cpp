@@ -14,7 +14,7 @@
  * ViewRequestHandler implementation
  */
 
-void ViewRequestHandler::BusinessProcessing(
+void ViewRequestHandler::ProcessBusinessLogic(
     const HttpRequestPacket& http_request_packet,
     HttpResponsePacket* http_response_packet) {
   std::string response_content = "{\"stock_name\":\"book\",\"stock_count\":3}";
