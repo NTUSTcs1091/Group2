@@ -32,6 +32,6 @@ void HttpRouterHandler::RouteHttpRequest(
     http_response_packet->content = "Resource not found";
   }
 
-  request_handler->BusinessProcessing(http_request_packet,
-                                      http_response_packet);
+  request_handler->ProcessBusinessLogic(http_request_packet,
+                                        http_response_packet);
 }
