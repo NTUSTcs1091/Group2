@@ -15,11 +15,11 @@
 
 class ViewRequestHandler : public RequestHandler {
 public:
-  ViewRequestHandler();
+  ViewRequestHandler() = default;
 
 public:
   // Handle view request, show inventory status
-  void BusinessProcessing(const HttpRequestPacket& http_request_packet,
+  void ProcessBusinessLogic(const HttpRequestPacket& http_request_packet,
                           HttpResponsePacket* http_response_packet) override;
 };
 

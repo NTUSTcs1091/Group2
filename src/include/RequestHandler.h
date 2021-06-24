@@ -18,11 +18,11 @@
 // Basic RequestHandler, father of business handlers
 class RequestHandler {
 public:
-  RequestHandler();
+  RequestHandler() = default;
 
 public:
-  // Business processing
-  virtual void BusinessProcessing(const HttpRequestPacket& http_request_packet,
+  // Process Business Logic
+  virtual void ProcessBusinessLogic(const HttpRequestPacket& http_request_packet,
                                   HttpResponsePacket* http_response_packet) = 0;
 };
 
