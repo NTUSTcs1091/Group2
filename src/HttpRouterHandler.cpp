@@ -29,7 +29,7 @@ void HttpRouterHandler::RouteHttpRequest(
     request_handler = new BuyRequestHandler();
   } else {
     http_response_packet->status_code = HttpResponsePacket::not_found;
-    http_response_packet->content = "Resource not found";
+    http_response_packet->content = "{\"msg\":\"Resource not found\"}";
   }
 
   request_handler->ProcessBusinessLogic(http_request_packet,
