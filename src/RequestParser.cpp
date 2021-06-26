@@ -23,7 +23,7 @@ std::tuple<RequestParser::parse_result, InputIterator> RequestParser::Parse(
     HttpRequestPacket* HttpRequestPacket, InputIterator begin,
     InputIterator end) {
   while (begin != end) {
-    parse_result result = consume(req, *begin++);
+    parse_result result = consume(HttpRequestPacket, *begin++);
     if (result == success || result == fail)
       return std::make_tuple(result, begin);
   }

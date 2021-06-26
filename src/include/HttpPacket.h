@@ -17,7 +17,7 @@
 // Basic http packets class.
 class HttpPacket {
 public:
-  HttpPacket();
+  HttpPacket() = default;
 
 public:
   // The header map of the http packet

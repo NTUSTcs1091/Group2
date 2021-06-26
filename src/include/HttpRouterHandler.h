@@ -16,7 +16,6 @@
 #include <unordered_map>
 
 #include <boost/asio.hpp>
-#include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include "HttpHandler.h"
@@ -32,8 +31,6 @@ private:
   HttpRouterHandler();
 
 public:
-  typedef boost::shared_ptr<RequestHandler> handler_ptr;
-
   // Get the singleton instance of HttpRouterHandler
   static HttpRouterHandler* GetInstance();
 
@@ -42,6 +39,8 @@ public:
                         HttpResponsePacket* http_response_packet);
 
 private:
+  typedef boost::shared_ptr<RequestHandler> handler_ptr;
+
   // Store all business request handler instances
   std::unordered_map<std::string, handler_ptr> map_request_handlers;
 };
