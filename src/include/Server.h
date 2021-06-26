@@ -21,8 +21,9 @@
 
 // Responsible for receiving requests from customers and handing them to
 // requesthandler for processing. Manage customer requests.
+// This is a singleton class
 class Server {
-public:
+private:
   // Initialize the server, establish an endpoint and wait for the connection
   Server(const std::string& address, const uint16_t port,
          const std::size_t max_session_count,
@@ -31,23 +32,28 @@ public:
   ~Server();
 
 public:
-  typedef std::unique_ptr<HttpRequestHandler> handler_ptr;
+  // Get the singleton instance of Server
+  static Server* GetInstance(const std::string& address, const uint16_t port,
+                             const std::size_t max_session_count,
+                             const std::size_t max_thread_count);
 
   // Avoid copying
   Server(const Server&) = delete;
   Server& operator=(const Server&) = delete;
 
+  // Release request handler
+  static void ReleaseHandler(const size_t n_count);
+
+private:
+  typedef std::shared_ptr<HttpRequestHandler> handler_ptr;
+
+  // Handle the requests sent by the client
+  void HandleAccept(handler_ptr new_handler,
+                    const boost::system::error_code& error);
   // Setup server service
   void AcceptOnce();
   // Run service
   void Run();
-  // Release request handler
-  void ReleaseHandler(const size_t n_count);
-
-private:
-  // Handle the requests sent by the client
-  void HandleAccept(handler_ptr new_handler,
-                    const boost::system::error_code& error);
 
 private:
   // Interact with the I/O services of the OS
@@ -55,7 +61,7 @@ private:
   // Listen for connection requests
   boost::asio::ip::tcp::acceptor acceptor;
   // The list of HTTP session handlers
-  std::unordered_map<int, handler_ptr> map_handler_list;
+  static std::unordered_map<std::size_t, handler_ptr> map_handler_list;
 
   // The number of sessions currently connected to the server
   std::size_t session_count;
