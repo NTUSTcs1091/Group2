@@ -90,7 +90,8 @@ HttpResponsePacket::HttpResponsePacket() {
 std::unique_ptr<std::vector<boost::asio::const_buffer>>
 HttpResponsePacket::GetBytes() {
   std::unique_ptr<std::vector<boost::asio::const_buffer>> buffers =
-      std::make_unique<std::vector<boost::asio::const_buffer>>();
+      std::unique_ptr<std::vector<boost::asio::const_buffer>>(
+          new std::vector<boost::asio::const_buffer>);
   buffers->push_back(status_strings::to_buffer(status_code));
   for (const auto &header : headers) {
     buffers->push_back(boost::asio::buffer(header.first));

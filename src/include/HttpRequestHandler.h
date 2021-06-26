@@ -19,7 +19,6 @@
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include "Server.h"
 #include "HttpHandler.h"
 #include "RequestParser.h"
 #include "HttpRequestPacket.h"
@@ -31,11 +30,8 @@ class HttpRequestHandler
     : public HttpHandler,
       public boost::enable_shared_from_this<HttpRequestHandler> {
 public:
-  typedef boost::shared_ptr<HttpRequestHandler> handler_ptr;
-
   // Initialize a http request handler
-  HttpRequestHandler(boost::asio::io_context* io_context, Server* server,
-                     const int nCount);
+  HttpRequestHandler(boost::asio::io_context* io_context, const std::size_t nCount);
 
   ~HttpRequestHandler();
 
@@ -47,7 +43,7 @@ public:
 
 public:
   // The key of current handler in mapHandlerList
-  int n_count;
+  std::size_t n_count;
 
 private:
   // Perform an asynchronous read operation
@@ -56,8 +52,6 @@ private:
   void HandleWrite();
 
 private:
-  // The http server pointer
-  Server* server;
   // Ensure synchronization when reading/writing buffer
   boost::asio::io_service::strand strand;
 

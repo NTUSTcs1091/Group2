@@ -18,7 +18,7 @@
 // Encapsulate http request packets.
 class HttpRequestPacket : public HttpPacket {
 public:
-  HttpRequestPacket();
+  HttpRequestPacket() = default;
 
 public:
   // The method of the http request
