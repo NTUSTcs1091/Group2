@@ -12,7 +12,7 @@
 
 #include <thread>
 
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 
 /**
  * Server implementation
@@ -38,14 +38,20 @@ Server::Server(const std::string &address, const uint16_t port,
 
 Server::~Server() { std::cout << "Bye~" << std::endl; }
 
+Server *Server::GetInstance(const std::string &address, const uint16_t port,
+                            const std::size_t max_session_count,
+                            const std::size_t max_thread_count) {
+  static Server instance(address, port, max_session_count, max_thread_count);
+  return &instance;
+}
+
 void Server::AcceptOnce() {
-  handler_ptr new_handler(
-      new HttpRequestHandler(&io_context, this, session_count));
+  handler_ptr new_handler(new HttpRequestHandler(&io_context, session_count));
   ++session_count;
 
   acceptor.async_accept(
       *new_handler->GetSocket(),
-      boost::bind(&Server::HandleAccept, this, new_handler.release(),
+      boost::bind(&Server::HandleAccept, this, new_handler,
                   boost::asio::placeholders::error));
 }
 

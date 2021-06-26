@@ -10,6 +10,7 @@
 
 #include "HttpRequestHandler.h"
 
+#include "Server.h"
 #include "HttpRouterHandler.h"
 
 /**
@@ -17,9 +18,8 @@
  */
 
 HttpRequestHandler::HttpRequestHandler(boost::asio::io_context* io_context,
-                                       Server* server, const int n_count)
+                                       const std::size_t n_count)
     : n_count(n_count), strand(*io_context), HttpHandler(io_context) {
-  this->server = server;
 }
 
 HttpRequestHandler::~HttpRequestHandler() {
@@ -32,7 +32,7 @@ void HttpRequestHandler::Stop() {
   socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
   socket.close();
   // this cannot be used after this call, it will be freed in server
-  server->ReleaseHandler(n_count);
+  Server::ReleaseHandler(n_count);
 }
 
 void HttpRequestHandler::HandleRead() {
