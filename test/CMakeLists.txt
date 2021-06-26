@@ -16,8 +16,7 @@ if(GTEST_FOUND)
   target_link_libraries(unit_tests 
     PUBLIC
       ${GTEST_BOTH_LIBRARIES} 
-      pthread 
-      httpserver
+      pthread
   )
 
   target_include_directories(unit_tests 
