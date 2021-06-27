@@ -20,7 +20,7 @@ public:
 public:
   // Handle view request, show inventory status
   void ProcessBusinessLogic(const HttpRequestPacket& http_request_packet,
-                          HttpResponsePacket* http_response_packet) override;
+                            HttpResponsePacket* http_response_packet) override;
 };
 
 #endif  //_VIEWREQUESTHANDLER_H
