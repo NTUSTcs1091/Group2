@@ -32,10 +32,12 @@ private:
   ~Server();
 
 public:
+  // Init the singleton instance of Server
+  static void InitInstance(const std::string& address, const uint16_t port,
+                           const std::size_t max_session_count,
+                           const std::size_t max_thread_count);
   // Get the singleton instance of Server
-  static Server* GetInstance(const std::string& address, const uint16_t port,
-                             const std::size_t max_session_count,
-                             const std::size_t max_thread_count);
+  static Server* GetInstance();
 
   // Avoid copying
   Server(const Server&) = delete;
@@ -46,6 +48,9 @@ public:
 
 private:
   typedef std::shared_ptr<HttpRequestHandler> handler_ptr;
+
+  // The singleton instance
+  static Server* instance;
 
   // Handle the requests sent by the client
   void HandleAccept(handler_ptr new_handler,
