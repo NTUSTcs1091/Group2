@@ -19,6 +19,8 @@ int main(int argc, char *argv[]){
    uint16_t port = 9999;
    std::size_t max_session_count = 1000;
    std::size_t max_thread_count = 100;
-   Server* server = Server::GetInstance(address, port, max_session_count, max_thread_count);
+   // io_context will automatically run when Server initialized
+   Server::InitInstance(address, port, max_session_count, max_thread_count);
+   Server* server = Server::GetInstance();
    return 0;
 }
