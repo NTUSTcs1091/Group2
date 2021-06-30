@@ -33,7 +33,7 @@ public:
   // Return the socket instance
   boost::asio::ip::tcp::socket* GetSocket() { return &socket; };
   // Pre-process the request packet
-  void Handle(const HttpPacket& input);
+  // void Handle(const HttpPacket& input);
 
 protected:
   // Keep connected with the client-side
