@@ -49,9 +49,6 @@ public:
 private:
   typedef std::shared_ptr<HttpRequestHandler> handler_ptr;
 
-  // The singleton instance
-  static Server* instance;
-
   // Handle the requests sent by the client
   void HandleAccept(handler_ptr new_handler,
                     const boost::system::error_code& error);
@@ -61,6 +58,8 @@ private:
   void Run();
 
 private:
+  // The singleton instance
+  static Server* instance;
   // Interact with the I/O services of the OS
   boost::asio::io_context io_context;
   // Listen for connection requests

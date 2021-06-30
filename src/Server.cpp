@@ -18,6 +18,9 @@
  * Server implementation
  */
 
+Server *Server::instance = nullptr;
+std::unordered_map<std::size_t, Server::handler_ptr> Server::map_handler_list;
+
 Server::Server(const std::string &address, const uint16_t port,
                const std::size_t max_session_count,
                const std::size_t max_thread_count)
