@@ -18,10 +18,8 @@ RequestParser::RequestParser() : state(init), content_size(0) {}
 
 void RequestParser::reset() { state = init; }
 
-template <typename InputIterator>
-std::tuple<RequestParser::parse_result, InputIterator> RequestParser::Parse(
-    HttpRequestPacket* HttpRequestPacket, InputIterator begin,
-    InputIterator end) {
+std::tuple<RequestParser::parse_result, char*> RequestParser::Parse(
+    HttpRequestPacket* HttpRequestPacket, char* begin, char* end) {
   while (begin != end) {
     parse_result result = consume(HttpRequestPacket, *begin++);
     if (result == success || result == fail)
