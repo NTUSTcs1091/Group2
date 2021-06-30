@@ -25,10 +25,10 @@
 
 // Assign the encapsulated http packets to the corresponding business logic
 // request-handler for processing.
-class HttpRouterHandler : public HttpHandler {
+class HttpRouterHandler {
 private:
   // Initialize HTTP request router singleton
-  HttpRouterHandler();
+  HttpRouterHandler() = default;
 
 public:
   // Get the singleton instance of HttpRouterHandler
@@ -38,11 +38,13 @@ public:
   void RouteHttpRequest(const HttpRequestPacket& http_request_packet,
                         HttpResponsePacket* http_response_packet);
 
-private:
-  typedef boost::shared_ptr<RequestHandler> handler_ptr;
+  // Avoid copying
+  HttpRouterHandler(const HttpRouterHandler&) = delete;
+  HttpRouterHandler& operator=(const HttpRouterHandler&) = delete;
 
-  // Store all business request handler instances
-  std::unordered_map<std::string, handler_ptr> map_request_handlers;
+private:
+  // The singleton instance
+  static HttpRouterHandler* instance;
 };
 
 #endif  //_HTTPROUTERHANDLER_H
