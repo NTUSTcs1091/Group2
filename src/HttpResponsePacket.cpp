@@ -34,7 +34,7 @@ constexpr char kNotImplemented[] = "HTTP/1.0 501 Not Implemented\r\n";
 constexpr char kBadGateway[] = "HTTP/1.0 502 Bad Gateway\r\n";
 constexpr char kServiceUnavailable[] = "HTTP/1.0 503 Service Unavailable\r\n";
 
-static boost::asio::const_buffer to_buffer(
+static boost::asio::const_buffer ToBuffer(
     HttpResponsePacket::status_type status) {
   switch (status) {
     case HttpResponsePacket::ok:
@@ -92,7 +92,7 @@ HttpResponsePacket::GetBytes() {
   std::unique_ptr<std::vector<boost::asio::const_buffer>> buffers =
       std::unique_ptr<std::vector<boost::asio::const_buffer>>(
           new std::vector<boost::asio::const_buffer>);
-  buffers->push_back(status_strings::to_buffer(status_code));
+  buffers->push_back(status_strings::ToBuffer(status_code));
   for (const auto &header : headers) {
     buffers->push_back(boost::asio::buffer(header.first));
     buffers->push_back(boost::asio::buffer(misc_strings::name_value_separator));
@@ -102,4 +102,19 @@ HttpResponsePacket::GetBytes() {
   buffers->push_back(boost::asio::buffer(misc_strings::crlf));
   buffers->push_back(boost::asio::buffer(content));
   return buffers;
+}
+
+std::string HttpResponsePacket::ToString() {
+  std::string return_str = "";
+  return_str += status_code;
+  return_str += misc_strings::crlf;
+  for (const auto &header : headers) {
+    return_str += header.first;
+    return_str += misc_strings::name_value_separator;
+    return_str += header.second;
+    return_str += misc_strings::crlf;
+  }
+  return_str += misc_strings::crlf;
+  return_str += content;
+  return return_str;
 }
