@@ -19,8 +19,7 @@
 
 HttpRequestHandler::HttpRequestHandler(boost::asio::io_context* io_context,
                                        const std::size_t n_count)
-    : n_count(n_count), strand(*io_context), HttpHandler(io_context) {
-}
+    : n_count(n_count), strand(*io_context), HttpHandler(io_context) {}
 
 HttpRequestHandler::~HttpRequestHandler() {
   std::cout << n_count << ":~HandlerComplete" << std::endl;
