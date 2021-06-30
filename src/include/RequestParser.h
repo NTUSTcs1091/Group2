@@ -31,10 +31,9 @@ public:
   // The enum return value is the result for parsing
   // The InputIterator return value indicates how much of the input has been
   // parsed
-  template <typename InputIterator>
-  std::tuple<parse_result, InputIterator> Parse(
-      HttpRequestPacket* HttpRequestPacket, InputIterator begin,
-      InputIterator end);
+  std::tuple<parse_result, char*> Parse(
+      HttpRequestPacket* HttpRequestPacket, char* begin,
+      char* end);
 
   // Avoid copying
   RequestParser(RequestParser& cpy) = delete;
